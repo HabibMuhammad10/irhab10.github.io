@@ -56,6 +56,7 @@
       </svg>
     </section>
     <!-- akhir jumbotron -->
+
     <!-- about -->
     <section id="about">
       <div class="container">
@@ -181,20 +182,29 @@
         </div>
         <div class="row justify-content-center">
           <div class="col-md-6">
-            <form>
+            <div class="alert alert-success alert-dismissible fade show d-none my-alert" role="alert">
+              <strong>Thank You!</strong> Your message has been sent. Have a nice day!
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <form name="portofolio-contacr-form">
               <div class="mb-3">
                 <label for="Name" class="form-label">Your Name</label>
-                <input type="text" class="form-control" id="name" aria-describedby="name" />
+                <input type="text" class="form-control" id="name" aria-describedby="name" name="name" />
               </div>
               <div class="mb-3">
                 <label for="email" class="form-label">Your Email</label>
-                <input type="email" class="form-control" id="email" aria-describedby="email" />
+                <input type="email" class="form-control" id="email" aria-describedby="email" name="email" />
               </div>
               <div class="mb-3">
                 <label for="pesan" class="form-label">Message</label>
-                <textarea class="form-control" id="pesan" rows="3"></textarea>
+                <textarea class="form-control" id="pesan" rows="3" name="message"></textarea>
               </div>
-              <button type="submit" class="btn btn-primary">Send</button>
+              <button type="submit" class="btn btn-primary btn-send">Send</button>
+
+              <button class="btn btn-primary btn-loading d-none" type="button" disabled>
+                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                Loading...
+              </button>
             </form>
           </div>
         </div>
@@ -203,7 +213,8 @@
         <path
           fill="#0d6efd"
           fill-opacity="1"
-          d="M0,288L60,282.7C120,277,240,267,360,272C480,277,600,299,720,288C840,277,960,235,1080,213.3C1200,192,1320,192,1380,192L1440,192L1440,320L1380,320C1320,320,1200,320,1080,
+          d="M0,288L60,282.7C120,277,240,267,360,272C480,277,600,299,720,288C840,277,960,235,1080,
+          213.3C1200,192,1320,192,1380,192L1440,192L1440,320L1380,320C1320,320,1200,320,1080,
          320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"
         ></path>
       </svg>
@@ -217,5 +228,34 @@
     <!-- akhir footer -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <script>
+      const scriptURL = "https://script.google.com/macros/s/AKfycbx2A0mNRYPNXgbBv_ULp_b4jSV8ibLZmRDadU2yzk6RpYJy2AKBdZANmmJ-BFwxQIWC8g/exec";
+      const form = document.forms["portofolio-contacr-form"];
+      const btnSend = document.querySelector(".btn-send");
+      const btnLoading = document.querySelector(".btn-loading");
+      const myAlert = document.querySelector(".my-alert");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        // saat tombol send diklik //
+        // tampil tombol loading, tombol send hilang //
+        btnLoading.classList.toggle("d-none");
+        btnSend.classList.toggle("d-none");
+
+        fetch(scriptURL, { method: "POST", body: new FormData(form) })
+          .then((response) => {
+            // tombol kirim tampil, tombol loading hilang //
+            btnLoading.classList.toggle("d-none");
+            btnSend.classList.toggle("d-none");
+            // tampil alert sukses//
+            myAlert.classList.toggle("d-none");
+            //isian form hilang//
+            form.reset();
+            console.log("Success!", response);
+          })
+          .catch((error) => console.error("Error!", error.message));
+      });
+    </script>
   </body>
 </html>
